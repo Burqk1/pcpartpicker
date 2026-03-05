@@ -1,0 +1,17 @@
+{
+  "key": "sapphire_rx-7600_hepsiburada",
+  "prices": [
+    {
+      "storeId": "hepsiburada",
+      "storeName": "Hepsiburada",
+      "price": 45101.23,
+      "url": "https://www.hepsiburada.com/amd-radeon-rx-7600-challenger-8gb-oc-ekran-karti-8gb-gddr6-128-bit-vrr-8k-1x-hdmi-2-1-3x-display-port-pm-HBC0000D0ECQI",
+      "inStock": true,
+      "shippingCost": 0,
+      "dataSource": "live",
+      "scrapedAt": "2026-03-03T18:03:19.765Z"
+    }
+  ],
+  "fetchedAt": "2026-03-03T18:03:19.798Z",
+  "expiresAt": "2026-03-03T18:33:19.798Z"
+}

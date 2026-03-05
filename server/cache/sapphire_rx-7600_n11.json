@@ -1,0 +1,17 @@
+{
+  "key": "sapphire_rx-7600_n11",
+  "prices": [
+    {
+      "storeId": "n11",
+      "storeName": "n11",
+      "price": 13298.07,
+      "url": "https://www.n11.com/urun/xfx-speedster-swft-210-radeon-rx-7600-8gb-gddr6-128bit-hdmidp-ekran-karti-94614708",
+      "inStock": true,
+      "shippingCost": 0,
+      "dataSource": "live",
+      "scrapedAt": "2026-03-03T18:03:19.285Z"
+    }
+  ],
+  "fetchedAt": "2026-03-03T18:03:19.292Z",
+  "expiresAt": "2026-03-03T18:33:19.292Z"
+}

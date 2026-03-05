@@ -1,0 +1,17 @@
+{
+  "key": "sapphire_rx-7600_amazon-tr",
+  "prices": [
+    {
+      "storeId": "amazon-tr",
+      "storeName": "Amazon TR",
+      "price": 18525.19,
+      "url": "https://www.amazon.com.tr/ASRock-RX7600-CL-8GO-Challenger/dp/B0C626FFG2/ref=sr_1_3?dib=eyJ2IjoiMSJ9.cJ5NUnN7f6IrMNXeSRJtNb4mD7GEmFkMSM7py2d6roRMFncEAouwDx_2dVnH-v64pyK-gl5t-6F6Fa7FuiFodM0A2sDeubpE9SWmYn9glE6OveRdQqWcybkjVS1GSbO03dlbxgfQlrU95uo0qjf9meNkh0jXd6V7a8XhWAOwpVDRx1BdcVF0awuBgXKPitcsnJ7I9rZO_EMgIMRIUoTFhn2TG9U_70H7PYPTAF9UlfAjI1zxVWTF2U5GITTKIOhGBsQXnVKrPKEaYH_2F86c3DWhyzQMNccO_urWCw5bWqo.SYo34NiYqAJZMbQ9o3cq8CQwobaLa50JQ4wKEhJEtR4&dib_tag=se&keywords=rx+6700&qid=1772560985&sr=8-3",
+      "inStock": true,
+      "shippingCost": 0,
+      "dataSource": "live",
+      "scrapedAt": "2026-03-03T18:03:09.071Z"
+    }
+  ],
+  "fetchedAt": "2026-03-03T18:03:09.081Z",
+  "expiresAt": "2026-03-03T18:33:09.081Z"
+}
