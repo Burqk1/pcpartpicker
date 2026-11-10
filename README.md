@@ -133,7 +133,7 @@ npm start          # node dist/index.js
 | `GET /api/products/:id` | Tek ürün |
 | `GET /api/products/category/:category` | Kategoriye göre ürünler |
 | `GET /api/prices/:productId` | Ürün için tüm mağazalardan canlı fiyatlar |
-| `GET /api/prices/search?q=&brand=&model=&category=` | Serbest arama (aşağıdaki nota bakın) |
+| `GET /api/prices/search?q=&brand=&model=&category=` | Serbest arama |
 
 ## Notlar ve sınırlamalar
 
@@ -142,6 +142,5 @@ npm start          # node dist/index.js
 - Giriş ve kayıt sahtedir: herhangi bir e-posta ve şifre kabul edilir, kullanıcı yalnızca tarayıcıda saklanır.
 - Paylaşım linki (`pcparcasecici.com/liste/<id>`) yalnızca metin olarak kopyalanır. Listeler sunucuda saklanmadığı için link başka bir cihazda listeyi açmaz.
 - Benchmark sayfasındaki puanların bir kısmı sabit tablodan gelir, eşleşmeyen modeller için rastgele üretilir. Forum sayfası statik içerik gösterir.
-- `/api/prices/search` rotası `/:productId` rotasından sonra tanımlandığı için, `/api/prices/search` isteği şu an `/:productId` tarafından yakalanır ve 404 döner.
 - Mağaza sitelerinin HTML yapısı değişirse tarayıcılar bozulabilir. Bu sitelerin kullanım koşullarını kontrol etmek size kalmıştır.
 - Lisans belirtilmemiştir.

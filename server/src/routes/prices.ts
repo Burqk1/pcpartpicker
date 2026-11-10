@@ -5,6 +5,32 @@ import type { SearchQuery } from '../types/index.js';
 
 const router = Router();
 
+// GET /api/prices/search?q=AMD+Ryzen+5+5600X&brand=AMD&model=Ryzen+5+5600X&category=cpu
+router.get('/search', async (req, res) => {
+  const { q, brand, model, category } = req.query;
+
+  if (!q || typeof q !== 'string') {
+    res.status(400).json({ error: 'Arama sorgusu (q) gerekli' });
+    return;
+  }
+
+  const query: SearchQuery = {
+    productId: 'search',
+    productName: q,
+    brand: (brand as string) || '',
+    model: (model as string) || q,
+    category: (category as string) || '',
+  };
+
+  try {
+    const prices = await scrapeOrchestrator.fetchPrices(query);
+    res.json(prices);
+  } catch (error) {
+    console.error(`[Prices] Search error for "${q}":`, error);
+    res.status(500).json({ error: 'Arama başarısız' });
+  }
+});
+
 // GET /api/prices/:productId - Fetch live prices for a product
 router.get('/:productId', async (req, res) => {
   const { productId } = req.params;
@@ -31,32 +57,6 @@ router.get('/:productId', async (req, res) => {
   } catch (error) {
     console.error(`[Prices] Error fetching prices for ${product.name}:`, error);
     res.status(500).json({ error: 'Fiyat bilgileri alınamadı' });
-  }
-});
-
-// GET /api/prices/search?q=AMD+Ryzen+5+5600X&brand=AMD&model=Ryzen+5+5600X&category=cpu
-router.get('/search', async (req, res) => {
-  const { q, brand, model, category } = req.query;
-
-  if (!q || typeof q !== 'string') {
-    res.status(400).json({ error: 'Arama sorgusu (q) gerekli' });
-    return;
-  }
-
-  const query: SearchQuery = {
-    productId: 'search',
-    productName: q,
-    brand: (brand as string) || '',
-    model: (model as string) || q,
-    category: (category as string) || '',
-  };
-
-  try {
-    const prices = await scrapeOrchestrator.fetchPrices(query);
-    res.json(prices);
-  } catch (error) {
-    console.error(`[Prices] Search error for "${q}":`, error);
-    res.status(500).json({ error: 'Arama başarısız' });
   }
 });
 
