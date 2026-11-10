@@ -1,61 +1,61 @@
 # PCParçaSeçici
 
-Türkiye pazarına yönelik, PCPartPicker benzeri bir PC parça seçme ve uyumluluk kontrol uygulaması. Parçaları seçip bir sistem listesi oluşturabilir, parçaların birbiriyle uyumlu olup olmadığını görebilir ve ürün sayfalarında Türk e-ticaret sitelerinden çekilen canlı fiyatları karşılaştırabilirsiniz.
+A PCPartPicker-style PC part picker and compatibility checker aimed at the Turkish market. You can pick parts to build a system list, see whether the parts are compatible with each other, and compare live prices scraped from Turkish e-commerce sites on product pages.
 
-Proje iki parçadan oluşur:
+The project has two parts:
 
-- **Ön yüz** (repo kökü): React 19, TypeScript, Vite 7 ve Tailwind CSS 4
-- **Fiyat sunucusu** (`server/`): Express + TypeScript. Mağaza sitelerini Cheerio ve Puppeteer ile tarar.
+- **Frontend** (repo root): React 19, TypeScript, Vite 7 and Tailwind CSS 4
+- **Price server** (`server/`): Express + TypeScript. Scrapes store sites with Cheerio and Puppeteer.
 
-## Özellikler
+## Features
 
-### Sistem toplama (`/liste`)
-- CPU, anakart, RAM, ekran kartı, depolama, PSU, kasa ve CPU soğutucu için parça seçme penceresi
-- Toplam fiyat ve seçili parça sayısı
-- Liste tarayıcıda saklanır (Zustand `persist`, `pcparca-partlist` anahtarı)
-- Paylaşım linkini ve Markdown formatında parça listesini panoya kopyalama
-- **Uyumluluk kontrolü** (`src/lib/compatibility.ts`):
-  - İşlemci soketi ile anakart soketi
-  - RAM tipi ile anakart bellek tipi, toplam RAM kapasitesi ile anakart sınırı
-  - Tahmini toplam TDP ile PSU gücü (sınıra yakınsa uyarı, aşıyorsa hata)
-  - Ekran kartı uzunluğu ve soğutucu yüksekliği ile kasa sınırları
-  - Anakart form faktörü ile kasa
-  - Soğutucunun desteklediği soketler
-  - PSU seçilmediyse bilgilendirme
+### System builder (`/liste`)
+- Part picker dialog for CPU, motherboard, RAM, graphics card, storage, PSU, case and CPU cooler
+- Total price and number of selected parts
+- The list is stored in the browser (Zustand `persist`, key `pcparca-partlist`)
+- Copy a share link and a Markdown-formatted part list to the clipboard
+- **Compatibility check** (`src/lib/compatibility.ts`):
+  - CPU socket vs. motherboard socket
+  - RAM type vs. motherboard memory type, total RAM capacity vs. motherboard limit
+  - Estimated total TDP vs. PSU wattage (warning if close to the limit, error if over it)
+  - Graphics card length and cooler height vs. case limits
+  - Motherboard form factor vs. case
+  - Sockets supported by the cooler
+  - Info message if no PSU is selected
 
-### Ürünler
-- Kategori listeleri (`/urunler/:category`): marka, fiyat aralığı ve spesifikasyon filtreleri, sayfalama
-- Ürün detayı (`/urun/:productId`): spesifikasyon tablosu, mağaza fiyat karşılaştırması ve Recharts ile fiyat geçmişi grafiği
-- Canlı fiyatlar `/api/prices/:productId` ucundan TanStack Query ile alınır (5 dk stale time, 2 tekrar deneme). Sunucu yanıt vermezse veya sonuç boş dönerse, ürün verisindeki statik fiyatlar gösterilir.
+### Products
+- Category lists (`/urunler/:category`): brand, price range and spec filters, pagination
+- Product detail (`/urun/:productId`): spec table, store price comparison and a price history chart with Recharts
+- Live prices are fetched from the `/api/prices/:productId` endpoint with TanStack Query (5 min stale time, 2 retries). If the server doesn't respond or returns an empty result, the static prices from the product data are shown.
 
-### Diğer sayfalar
-- Ana sayfa, sistem rehberleri (`/rehberler`, `/rehber/:guideId`), tamamlanmış sistemler (`/yapilar`, `/yapi/:buildId`)
-- Fiyat trendleri (`/trendler`), benchmark (`/benchmark`) ve forum (`/forum`)
-- Giriş, kayıt ve profil (`/giris`, `/kayit`, `/profil`)
-- Açık ve koyu tema (varsayılan koyu)
+### Other pages
+- Home page, build guides (`/rehberler`, `/rehber/:guideId`), completed builds (`/yapilar`, `/yapi/:buildId`)
+- Price trends (`/trendler`), benchmark (`/benchmark`) and forum (`/forum`)
+- Login, sign-up and profile (`/giris`, `/kayit`, `/profil`)
+- Light and dark theme (dark by default)
 
-### Fiyat sunucusu
-- Desteklenen mağazalar (`server/src/config.ts`):
-  - Cheerio ile: Vatan Bilgisayar, n11, Teknosa
-  - Puppeteer (`puppeteer-extra` + stealth eklentisi) ile: Amazon TR, Hepsiburada, Trendyol
-- Tüm mağazalar paralel sorgulanır. Sonuçlar fiyat + kargo toplamına göre sıralanır.
-- `productMatcher.ts`, arama sonuçlarındaki başlıkları 0–100 arası puanlar ve yanlış ürünleri (farklı model, hazır sistem, laptop vb.) eler
-- Önbellek: 30 dakika TTL, `server/cache/` altına JSON dosyası olarak yazılır ve sunucu açılışında diskten geri yüklenir. Tarama başarısız olursa süresi dolmuş önbellek döner.
-- Mağaza başına istek aralığı 2 sn, istek zaman aşımı 15 sn, en fazla 2 tekrar deneme
+### Price server
+- Supported stores (`server/src/config.ts`):
+  - With Cheerio: Vatan Bilgisayar, n11, Teknosa
+  - With Puppeteer (`puppeteer-extra` + stealth plugin): Amazon TR, Hepsiburada, Trendyol
+- All stores are queried in parallel. Results are sorted by price + shipping total.
+- `productMatcher.ts` scores titles in search results from 0 to 100 and filters out wrong products (different model, prebuilt system, laptop, etc.)
+- Cache: 30 minute TTL, written as JSON files under `server/cache/` and reloaded from disk on server startup. If scraping fails, the expired cache is returned.
+- Per-store request interval 2 s, request timeout 15 s, at most 2 retries
 
-## Teknolojiler
+## Tech stack
 
 | | |
 |---|---|
-| Ön yüz | React 19, TypeScript 5.9, Vite 7, React Router 7 |
-| Stil | Tailwind CSS 4 (`@tailwindcss/vite`), Framer Motion, lucide-react |
-| Durum / veri | Zustand 5, TanStack Query 5 |
-| Formlar | React Hook Form + Zod |
-| Grafik | Recharts |
+| Frontend | React 19, TypeScript 5.9, Vite 7, React Router 7 |
+| Styling | Tailwind CSS 4 (`@tailwindcss/vite`), Framer Motion, lucide-react |
+| State / data | Zustand 5, TanStack Query 5 |
+| Forms | React Hook Form + Zod |
+| Charts | Recharts |
 | SEO | react-helmet-async |
-| Sunucu | Express 4, Cheerio, Axios, Puppeteer 23 (puppeteer-extra, stealth), tsx |
+| Server | Express 4, Cheerio, Axios, Puppeteer 23 (puppeteer-extra, stealth), tsx |
 
-## Proje yapısı
+## Project structure
 
 ```
 .
@@ -81,15 +81,15 @@ Proje iki parçadan oluşur:
 └── vite.config.ts           # @ alias, /api -> localhost:3001 proxy
 ```
 
-## Gereksinimler
+## Requirements
 
-- Node.js. Vite 7 için Node 20.19+ veya 22.12+ gerekir.
+- Node.js. Vite 7 requires Node 20.19+ or 22.12+.
 - npm
-- Sunucu tarafında Puppeteer, kurulum sırasında Chromium indirir
+- On the server side, Puppeteer downloads Chromium during installation
 
-## Kurulum ve çalıştırma
+## Installation and running
 
-Ön yüz ve sunucunun bağımlılıkları ayrı ayrı kurulur.
+The frontend and server dependencies are installed separately.
 
 ```bash
 # Ön yüz
@@ -102,9 +102,9 @@ npm install
 npm run dev        # tsx watch, http://localhost:3001
 ```
 
-Geliştirme sırasında Vite, `/api` ile başlayan istekleri `http://localhost:3001` adresine yönlendirir. Sunucu çalışmıyorsa uygulama yine açılır ve statik fiyatlar gösterilir.
+During development, Vite forwards requests starting with `/api` to `http://localhost:3001`. If the server isn't running, the app still opens and shows static prices.
 
-Diğer komutlar:
+Other commands:
 
 ```bash
 # kökte
@@ -117,30 +117,30 @@ npm run build      # tsc -> dist/
 npm start          # node dist/index.js
 ```
 
-## Yapılandırma
+## Configuration
 
-- `PORT`: sunucu portu (varsayılan `3001`). Başka bir ortam değişkeni yoktur.
-- Önbellek süresi, istek aralığı, zaman aşımı ve mağazaları açıp kapatma ayarları `server/src/config.ts` içindedir.
-- CORS yalnızca `http://localhost:5173` ve `http://localhost:4173` adreslerine açıktır.
-- Önbellek dizini `./cache` olarak göreli tanımlıdır. Sunucuyu `server/` dizininden başlatın.
+- `PORT`: server port (default `3001`). There are no other environment variables.
+- Cache duration, request interval, timeout and per-store on/off settings are in `server/src/config.ts`.
+- CORS is only open to `http://localhost:5173` and `http://localhost:4173`.
+- The cache directory is defined as the relative path `./cache`. Start the server from the `server/` directory.
 
 ## API
 
-| Uç nokta | Açıklama |
+| Endpoint | Description |
 |---|---|
-| `GET /api/health` | Sağlık kontrolü |
-| `GET /api/products` | Sunucunun bildiği ürün kataloğu |
-| `GET /api/products/:id` | Tek ürün |
-| `GET /api/products/category/:category` | Kategoriye göre ürünler |
-| `GET /api/prices/:productId` | Ürün için tüm mağazalardan canlı fiyatlar |
-| `GET /api/prices/search?q=&brand=&model=&category=` | Serbest arama |
+| `GET /api/health` | Health check |
+| `GET /api/products` | Product catalog known to the server |
+| `GET /api/products/:id` | Single product |
+| `GET /api/products/category/:category` | Products by category |
+| `GET /api/prices/:productId` | Live prices for a product from all stores |
+| `GET /api/prices/search?q=&brand=&model=&category=` | Free-text search |
 
-## Notlar ve sınırlamalar
+## Notes and limitations
 
-- Ürünler, rehberler, sistemler ve fiyat geçmişi `src/data/` altındaki statik verilerden gelir. Ön yüzdeki "API" katmanı bu veriyi yapay bir gecikmeyle (150 ms) döndürür. Sunucu yalnızca canlı fiyat için kullanılır.
-- Sunucudaki ürün kataloğu (`server/src/routes/products.ts`), ön yüzdeki verinin elle senkron tutulan bir kopyasıdır.
-- Giriş ve kayıt sahtedir: herhangi bir e-posta ve şifre kabul edilir, kullanıcı yalnızca tarayıcıda saklanır.
-- Paylaşım linki (`pcparcasecici.com/liste/<id>`) yalnızca metin olarak kopyalanır. Listeler sunucuda saklanmadığı için link başka bir cihazda listeyi açmaz.
-- Benchmark sayfasındaki puanların bir kısmı sabit tablodan gelir, eşleşmeyen modeller için rastgele üretilir. Forum sayfası statik içerik gösterir.
-- Mağaza sitelerinin HTML yapısı değişirse tarayıcılar bozulabilir. Bu sitelerin kullanım koşullarını kontrol etmek size kalmıştır.
-- Lisans belirtilmemiştir.
+- Products, guides, builds and price history come from static data under `src/data/`. The frontend "API" layer returns this data with an artificial delay (150 ms). The server is only used for live prices.
+- The server's product catalog (`server/src/routes/products.ts`) is a manually synced copy of the frontend data.
+- Login and sign-up are fake: any email and password are accepted, and the user is stored only in the browser.
+- The share link (`pcparcasecici.com/liste/<id>`) is copied as text only. Since lists aren't stored on the server, the link won't open the list on another device.
+- Some of the scores on the benchmark page come from a fixed table; for unmatched models they are generated randomly. The forum page shows static content.
+- The scrapers may break if the HTML structure of the store sites changes. Checking those sites' terms of use is up to you.
+- No license is specified.
